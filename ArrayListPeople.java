@@ -2,14 +2,42 @@ package com.ait.ex6B2;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.jar.Attributes.Name;
 
 public class ArrayListPeople {
 	private static Scanner sc = new Scanner(System.in);
 	
 	public static void main(String[] args) {
-		userChoice();
-
+		int userOption = 0;
+		ArrayList<Person> people = new ArrayList<Person>();
+		while (userOption != 7) {
+			userOption = userChoice();
+			
+			if (userOption == 1) {
+				add(people);
+			} else if (userOption == 2) {
+				
+				update(people);
+				
+			} else if (userOption == 3) {
+				
+				deletePerson(people);
+				
+			} else if (userOption == 4) {
+				
+				deleteEveryone(people);
+				
+			} else if (userOption == 5) {
+				
+				findPersonByName(people);
+			
+			} else if (userOption == 6) {
+				
+				display(people);
+			}
+		}
 	}
+		
 	static int personThereAlready = 0;
 	public static int userChoice() {
 		int option = 0;
@@ -25,7 +53,7 @@ public class ArrayListPeople {
 		
 		System.out.print("Enter the persons name --> ");
 		name = sc.next();
-		System.out.print("\nEnter the persons age --> ");
+		System.out.print("Enter the persons age --> ");
 		age = sc.nextInt();
 		
 		Person person = new Person(name,age);
@@ -34,9 +62,11 @@ public class ArrayListPeople {
 	
 	public static int personThereAlready(String name, ArrayList<Person> people) {
 		
-		for(int i=0; i< people.size();i++) {
-			Person lookedPerson = people.get(i);
-			if (name.equals(lookedPerson)) {
+		for(int i=0; i < people.size();i++) {
+			
+			System.out.println(String.valueOf(people.get(i)));
+			
+			if (name.contains(people.get(i).toString())) {
 				personThereAlready = i;
 			} else {
 				personThereAlready = -1;
@@ -47,15 +77,20 @@ public class ArrayListPeople {
 	}
 	
 	public static void display(ArrayList<Person> people) {
-
+		
 		for (int i=0; i<people.size();i++) {
-			System.out.print(people);
+		
+			System.out.println(people.get(i));
 		}
+
+		
 	}
 	
 	public static void update(ArrayList<Person> people) {
+		
 		System.out.print("Enter the persons name you wish to change -->");
 		String personNameToBeChanged = sc.next();
+		
 		if (personThereAlready(personNameToBeChanged, people) == -1) {
 			System.out.println(personNameToBeChanged+" is not in the list...");
 		} else {
@@ -85,16 +120,30 @@ public class ArrayListPeople {
 	}
 	
 	public static void findPersonByName(ArrayList<Person> people) {
+		
 		System.out.print("Enter the persons name -->");
+		
 		String personToBeFound = sc.next();
+		String prefix = "name=";
+		
 		for (int i=0;i<people.size();i++) {
-			if (personToBeFound.equals(people.get(i))) {
+			
+			String personLooked = people.get(i).toString().split(",")[1];
+			System.out.println(personLooked);
+			
+			if (personToBeFound.equalsIgnoreCase(personLooked)) {
 				display(people);
 				System.out.println("Person found...");
 			} else {
 				System.out.println("Did not find the person!");
 			}
 		}
+	}
+	
+	public static void deleteEveryone(ArrayList<Person> people) {
+		
+			people.clear();
+		
 	}
 	
 }
