@@ -38,7 +38,7 @@ public class ArrayListPeople {
 		}
 	}
 		
-	static int personThereAlready = 0;
+	
 	public static int userChoice() {
 		int option = 0;
 		System.out.println("What do you want to do?\n1.Add\n2.Update\n3.Delete a person\n4.Delete everyone"
@@ -61,19 +61,18 @@ public class ArrayListPeople {
 	}
 	
 	public static int personThereAlready(String name, ArrayList<Person> people) {
-		
+		int index = -1;
 		for(int i=0; i < people.size();i++) {
 			
-			System.out.println(String.valueOf(people.get(i)));
+			Person person = people.get(i);
 			
-			if (name.contains(people.get(i).toString())) {
-				personThereAlready = i;
-			} else {
-				personThereAlready = -1;
+			if (person.getName().equalsIgnoreCase(name)) {
+				index = i;
+			break;
 			}
 		}
 		
-		return personThereAlready;
+		return index;
 	}
 	
 	public static void display(ArrayList<Person> people) {
@@ -99,8 +98,10 @@ public class ArrayListPeople {
 			System.out.print("\nEnter the new age -->");
 			int newAge = sc.nextInt();
 			
-			Person newPerson = new Person(newName, newAge);
-			people.set(personThereAlready,newPerson);
+			Person person = people.get(personThereAlready(personNameToBeChanged, people));
+			person.setName(newName);
+			person.setAge(newAge);
+			System.out.println(people);
 		}
 	}
 	
@@ -109,8 +110,9 @@ public class ArrayListPeople {
 		display(people);
 		System.out.print("Enter the persons name you wish to delete -->");
 		String nameToDelete = sc.next();
+		
 		if (personThereAlready(nameToDelete, people) != -1) {
-			people.remove(personThereAlready);
+			people.remove(personThereAlready(nameToDelete, people));
 			System.out.println("The persons list after ");
 			display(people);
 		} else {
@@ -124,19 +126,21 @@ public class ArrayListPeople {
 		System.out.print("Enter the persons name -->");
 		
 		String personToBeFound = sc.next();
-		String prefix = "name=";
-		
+		boolean personFound = false;
 		for (int i=0;i<people.size();i++) {
 			
-			String personLooked = people.get(i).toString().split(",")[1];
-			System.out.println(personLooked);
+			Person person = people.get(i);
 			
-			if (personToBeFound.equalsIgnoreCase(personLooked)) {
-				display(people);
-				System.out.println("Person found...");
-			} else {
-				System.out.println("Did not find the person!");
-			}
+			if (personToBeFound.equalsIgnoreCase(person.getName())) {
+				personFound = true;
+				
+			} break;
+		}
+		if (personFound) {
+			System.out.println("Person found...");
+			display(people);
+		} else {
+			System.out.println("Did not find the person...");
 		}
 	}
 	
